@@ -1,0 +1,148 @@
+import java.util.ArrayList;
+
+// Car class
+class Car {
+    private String carId;
+    private String model;
+    private boolean available;
+
+    public Car(String carId, String model) {
+        this.carId = carId;
+        this.model = model;
+        this.available = true;
+    }
+
+    public String getCarId() {
+        return carId;
+    }
+
+    public String getModel() {
+        return model;
+    }
+
+    public boolean isAvailable() {
+        return available;
+    }
+
+    public void rentCar() {
+        available = false;
+    }
+
+    public void returnCar() {
+        available = true;
+    }
+}
+
+// Customer class
+class Customer {
+    private String customerId;
+    private String name;
+
+    public Customer(String customerId, String name) {
+        this.customerId = customerId;
+        this.name = name;
+    }
+
+    public String getCustomerId() {
+        return customerId;
+    }
+
+    public String getName() {
+        return name;
+    }
+}
+
+// Rental class
+class Rental {
+    private Car car;
+    private Customer customer;
+    private int days;
+
+    public Rental(Car car, Customer customer, int days) {
+        this.car = car;
+        this.customer = customer;
+        this.days = days;
+    }
+
+    public double calculateCost() {
+        return days * 50.0;
+    }
+
+    public Car getCar() {
+        return car;
+    }
+}
+
+// RentalAgency class
+class RentalAgency {
+    private ArrayList<Car> cars = new ArrayList<>();
+    private ArrayList<Customer> customers = new ArrayList<>();
+
+    public void addCar(Car car) {
+        cars.add(car);
+    }
+
+    public void addCustomer(Customer customer) {
+        customers.add(customer);
+    }
+
+    public void displayAvailableCars() {
+        for (Car car : cars) {
+            if (car.isAvailable()) {
+                System.out.println(car.getCarId() + " - " + car.getModel());
+            }
+        }
+    }
+
+    public void rentCar(String carId) {
+        for (Car car : cars) {
+            if (car.getCarId().equals(carId) && car.isAvailable()) {
+                car.rentCar();
+                System.out.println("Car rented successfully.");
+                return;
+            }
+        }
+        System.out.println("Car not available.");
+    }
+
+    public void returnCar(String carId) {
+        for (Car car : cars) {
+            if (car.getCarId().equals(carId)) {
+                car.returnCar();
+                System.out.println("Car returned successfully.");
+                return;
+            }
+        }
+        System.out.println("Car not found.");
+    }
+}
+
+// Main class
+public class CarRentalSystem {
+    public static void main(String[] args) {
+
+        RentalAgency agency = new RentalAgency();
+
+        Car car1 = new Car("C01", "Toyota Corolla");
+        Car car2 = new Car("C02", "Honda Civic");
+
+        Customer customer1 = new Customer("U01", "Desree");
+
+        agency.addCar(car1);
+        agency.addCar(car2);
+        agency.addCustomer(customer1);
+
+        System.out.println("Available Cars:");
+        agency.displayAvailableCars();
+
+        agency.rentCar("C01");
+
+        System.out.println("\nAvailable Cars After Rental:");
+        agency.displayAvailableCars();
+
+        agency.returnCar("C01");
+
+        System.out.println("\nAvailable Cars After Return:");
+        agency.displayAvailableCars();
+    }
+}
